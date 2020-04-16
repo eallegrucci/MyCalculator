@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             answer.setText("9");
         }
         if (v.getId() == R.id.btnZero) {
-            answer.setText("10");
+            answer.setText("0");
         }
     }
 }
