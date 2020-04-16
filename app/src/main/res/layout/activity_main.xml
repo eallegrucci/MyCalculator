@@ -11,7 +11,7 @@
         android:id="@+id/answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="0"
         android:textAlignment="textEnd"
         android:textSize="36dp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"

@@ -58,6 +58,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mult.setOnClickListener(this);
     }
 
+    protected void displayValue() {
+        CharSequence text = answer.getText();
+
+    }
+
+    protected void deleteValue() {
+        float size = answer.getTextSize();
+        CharSequence text;
+        if (size <= 1) {
+            answer.setText("0");
+        }
+        else {
+            text = answer.getText();
+            text = text.subSequence(0, text.length() - 1);
+            answer.setText(text);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         //TODO: store the data from "answer" into a local string
@@ -68,61 +86,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //helper function for del
 
         if (v.getId() == R.id.btnLParen) {
-            answer.setText("(");
+            answer.append("(");
         }
         if (v.getId() == R.id.btnRParen) {
-            answer.setText(")");
+            answer.append(")");
         }
         if (v.getId() == R.id.btnMult) {
-            answer.setText("*");
+            answer.append("*");
         }
         if (v.getId() == R.id.btnDel) {
-            answer.setText("DEL");
+            //remove item
+            deleteValue();
         }
         if (v.getId() == R.id.btnDiv) {
-            answer.setText("/");
+            answer.append("/");
         }
         if (v.getId() == R.id.btnAdd) {
-            answer.setText("+");
+            answer.append("+");
         }
         if (v.getId() == R.id.btnSub) {
-            answer.setText("-");
+            answer.append("-");
         }
         if (v.getId() == R.id.btnDot) {
-            answer.setText(".");
+            answer.append(".");
         }
         if (v.getId() == R.id.btnEq) {
-            answer.setText("=");
+            //displayValue(answer);
         }
         if (v.getId() == R.id.btnOne) {
-            answer.setText("1");
+            answer.append("1");
         }
         if (v.getId() == R.id.btnTwo) {
-            answer.setText("2");
+            answer.append("2");
         }
         if (v.getId() == R.id.btnThree) {
-            answer.setText("3");
+            answer.append("3");
         }
         if (v.getId() == R.id.btnFour) {
-            answer.setText("4");
+            answer.append("4");
         }
         if (v.getId() == R.id.btnFive) {
-            answer.setText("5");
+            answer.append("5");
         }
         if (v.getId() == R.id.btnSix) {
-            answer.setText("6");
+            answer.append("6");
         }
         if (v.getId() == R.id.btnSeven) {
-            answer.setText("7");
+            answer.append("7");
         }
         if (v.getId() == R.id.btnEight) {
-            answer.setText("8");
+            answer.append("8");
         }
         if (v.getId() == R.id.btnNine) {
-            answer.setText("9");
+            answer.append("9");
         }
         if (v.getId() == R.id.btnZero) {
-            answer.setText("0");
+            answer.append("0");
         }
     }
 }
