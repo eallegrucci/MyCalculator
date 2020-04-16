@@ -60,14 +60,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void displayValue() {
         CharSequence text = answer.getText();
+        CharSequence result = "";
+        CharSequence val, left, right;
+        if (answer.getTextSize() <= 1) {
+            return;
+        }
+        for (int i = 0; i < text.length(); i++) {
+            while (text.charAt(i) != '*' && text.charAt(i) != '(' && text.charAt(i) != ')'
+                    && text.charAt(i) != '+' && text.charAt(i) != '-' && text.charAt(i) != '/') {
+                //val += text.charAt(i);
+            }
+        }
 
+        answer.setText(result);
     }
 
     protected void deleteValue() {
         float size = answer.getTextSize();
         CharSequence text;
         if (size <= 1) {
-            answer.setText("0");
+            answer.setText("");
         }
         else {
             text = answer.getText();
@@ -111,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             answer.append(".");
         }
         if (v.getId() == R.id.btnEq) {
-            //displayValue(answer);
+            displayValue();
         }
         if (v.getId() == R.id.btnOne) {
             answer.append("1");
