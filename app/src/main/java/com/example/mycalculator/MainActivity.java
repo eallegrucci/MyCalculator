@@ -60,6 +60,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        //TODO: store the data from "answer" into a local string
+        //add new input to string and redisplay
+        //helper function for displaying called display()
+        //helper function for add, sub, mult, div
+        //helper function for answer
+        //helper function for del
+
         if (v.getId() == R.id.btnLParen) {
             answer.setText("(");
         }
