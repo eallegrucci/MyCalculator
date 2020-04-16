@@ -5,15 +5,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
-
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.text.DecimalFormat;
 
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     Button leftParen, rightParen, dot, del;
     Button one, two, three, four, five, six, seven, eight, nine, zero;
-    Button add, sub, div, mult;
-    TextView answer;
+    Button add, sub, div, mult, equals;
+    TextView leftVal, answer;
+
+    private double leftValue = Double.NaN;
+    private double rightValue;
+
+    private static final char ADD = '+';
+    private static final char SUB = '-';
+    private static final char MULT = '*';
+    private static final char DIV = '/';
+    private static final char LEFTPAREN = '(';
+    private static final char RIGHTPAREN = ')';
+
+    private char CURRENT_ACTION;
+    DecimalFormat decimalFormat = new DecimalFormat("#.##########");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sub = (Button)findViewById(R.id.btnSub);
         div = (Button)findViewById(R.id.btnDiv);
         mult = (Button)findViewById(R.id.btnMult);
+        equals = (Button)findViewById(R.id.btnEq);
+        leftVal = (TextView)findViewById(R.id.leftValue);
         answer = (TextView)findViewById(R.id.answer);
         leftParen.setOnClickListener(this);
         rightParen.setOnClickListener(this);
@@ -56,47 +71,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sub.setOnClickListener(this);
         div.setOnClickListener(this);
         mult.setOnClickListener(this);
+        equals.setOnClickListener(this);
     }
 
-    protected void displayValue() {
-        CharSequence text = answer.getText();
-        CharSequence result = "";
-        CharSequence val, left, right;
-        if (answer.getTextSize() <= 1) {
-            return;
-        }
-        for (int i = 0; i < text.length(); i++) {
-            while (text.charAt(i) != '*' && text.charAt(i) != '(' && text.charAt(i) != ')'
-                    && text.charAt(i) != '+' && text.charAt(i) != '-' && text.charAt(i) != '/') {
-                //val += text.charAt(i);
-            }
-        }
+    private void computeCalculation() {
+        if(!Double.isNaN(leftValue)) {
+            rightValue = Double.parseDouble(answer.getText().toString());
+            android.util.Log.i("ComputeCalc: ", "lVal: " + leftValue);
+            android.util.Log.i("ComputeCalc: ", "rVal: " + rightValue);
+            answer.setText(null);
 
-        answer.setText(result);
-    }
-
-    protected void deleteValue() {
-        float size = answer.getTextSize();
-        CharSequence text;
-        if (size <= 1) {
-            answer.setText("");
+            if(CURRENT_ACTION == ADD)
+                leftValue = this.leftValue + rightValue;
+            else if(CURRENT_ACTION == SUB)
+                leftValue = this.leftValue - rightValue;
+            else if(CURRENT_ACTION == MULT)
+                leftValue = this.leftValue * rightValue;
+            else if(CURRENT_ACTION == DIV)
+                leftValue = this.leftValue / rightValue;
         }
         else {
+            try {
+                leftValue = Double.parseDouble(answer.getText().toString());
+            }
+            catch (Exception e){}
+        }
+    }
+
+    private void deleteValue() {
+        float size = answer.getTextSize();
+        CharSequence text;
+        if (size >= 1) {
             text = answer.getText();
             text = text.subSequence(0, text.length() - 1);
             answer.setText(text);
+        }
+        else {
+            try {
+                answer.setText("0");
+            }
+            catch (Exception e){}
         }
     }
 
     @Override
     public void onClick(View v) {
-        //TODO: store the data from "answer" into a local string
-        //add new input to string and redisplay
-        //helper function for displaying called display()
-        //helper function for add, sub, mult, div
-        //helper function for answer
-        //helper function for del
-
         if (v.getId() == R.id.btnLParen) {
             answer.append("(");
         }
@@ -104,26 +123,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             answer.append(")");
         }
         if (v.getId() == R.id.btnMult) {
-            answer.append("*");
+            computeCalculation();
+            CURRENT_ACTION = MULT;
+            //answer.append("*");
+            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
+            android.util.Log.i("onClick: ", "rVal: " + rightValue);
+            leftVal.setText(decimalFormat.format(leftValue) + " * ");
+            answer.setText(null);
         }
         if (v.getId() == R.id.btnDel) {
-            //remove item
             deleteValue();
         }
         if (v.getId() == R.id.btnDiv) {
-            answer.append("/");
+            computeCalculation();
+            CURRENT_ACTION = DIV;
+            //answer.append("/");
+            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
+            android.util.Log.i("onClick: ", "rVal: " + rightValue);
+            leftVal.setText(decimalFormat.format(leftValue) + " / ");
+            answer.setText(null);
         }
         if (v.getId() == R.id.btnAdd) {
-            answer.append("+");
+            computeCalculation();
+            CURRENT_ACTION = ADD;
+            //answer.append("+");
+            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
+            android.util.Log.i("onClick: ", "rVal: " + rightValue);
+            leftVal.setText(decimalFormat.format(leftValue) + " + ");
+            answer.setText(null);
         }
         if (v.getId() == R.id.btnSub) {
-            answer.append("-");
+            computeCalculation();
+            CURRENT_ACTION = SUB;
+            //answer.append("-");
+            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
+            android.util.Log.i("onClick: ", "rVal: " + rightValue);
+            leftVal.setText(decimalFormat.format(leftValue) + " - ");
+            answer.setText(null);
+        }
+        if (v.getId() == R.id.btnEq) {
+            computeCalculation();
+            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
+            android.util.Log.i("onClick: ", "rVal: " + rightValue);
+            leftVal.setText(leftVal.getText().toString() + decimalFormat.format(rightValue) +
+                    " = ");// + decimalFormat.format(leftValue));
+            answer.setText(decimalFormat.format(leftValue));
+            //answer.append(" = " + leftValue);
+            leftValue = Double.NaN;
+            CURRENT_ACTION = 'O';
         }
         if (v.getId() == R.id.btnDot) {
             answer.append(".");
-        }
-        if (v.getId() == R.id.btnEq) {
-            displayValue();
         }
         if (v.getId() == R.id.btnOne) {
             answer.append("1");
