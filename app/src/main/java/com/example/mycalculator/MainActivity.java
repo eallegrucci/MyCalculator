@@ -10,8 +10,7 @@ import android.os.Bundle;
 import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    Button leftParen, rightParen, dot, del;
-    Button one, two, three, four, five, six, seven, eight, nine, zero;
+    Button sign, dot, del, one, two, three, four, five, six, seven, eight, nine, zero;
     Button add, sub, div, mult, equals;
     TextView leftVal, answer;
 
@@ -22,8 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final char SUB = '-';
     private static final char MULT = '*';
     private static final char DIV = '/';
-    private static final char LEFTPAREN = '(';
-    private static final char RIGHTPAREN = ')';
 
     private char CURRENT_ACTION;
     DecimalFormat decimalFormat = new DecimalFormat("#.##########");
@@ -32,8 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        leftParen = (Button)findViewById(R.id.btnLParen);
-        rightParen = (Button)findViewById(R.id.btnRParen);
+        sign = (Button)findViewById(R.id.btnSign);
         dot = (Button)findViewById(R.id.btnDot);
         del = (Button)findViewById(R.id.btnDel);
         one = (Button)findViewById(R.id.btnOne);
@@ -53,8 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         equals = (Button)findViewById(R.id.btnEq);
         leftVal = (TextView)findViewById(R.id.leftValue);
         answer = (TextView)findViewById(R.id.answer);
-        leftParen.setOnClickListener(this);
-        rightParen.setOnClickListener(this);
+        sign.setOnClickListener(this);
         dot.setOnClickListener(this);
         del.setOnClickListener(this);
         one.setOnClickListener(this);
@@ -116,11 +111,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnLParen) {
-            answer.append("(");
-        }
-        if (v.getId() == R.id.btnRParen) {
-            answer.append(")");
+        if (v.getId() == R.id.btnSign) {
+            double val = Double.parseDouble(answer.getText().toString());
+            val = -val;
+            answer.setText(decimalFormat.format(val));
         }
         if (v.getId() == R.id.btnMult) {
             computeCalculation();
