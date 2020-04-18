@@ -173,11 +173,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             computeCalculation();
             android.util.Log.i("OnClick: ", "lVal: " + leftValue);
             android.util.Log.i("onClick: ", "rVal: " + rightValue);
-            leftVal.setText(leftVal.getText().toString() + decimalFormat.format(rightValue) +
-                    " = " + decimalFormat.format(leftValue));// + decimalFormat.format(leftValue));
-            //answer.setText(decimalFormat.format(leftValue));
-            //answer.append(" = " + leftValue);
-            leftValue = leftValue;
+            if (CURRENT_ACTION == 'O')
+                leftVal.setText(decimalFormat.format(leftValue));
+            else {
+                leftVal.setText(leftVal.getText().toString() + decimalFormat.format(rightValue) +
+                        " = " + decimalFormat.format(leftValue));
+                //answer.setText(decimalFormat.format(leftValue));
+                //answer.append(" = " + leftValue);
+            }
+            leftValue = Double.NaN;
             CURRENT_ACTION = 'O';
         }
         if (v.getId() == R.id.btnDot) {
