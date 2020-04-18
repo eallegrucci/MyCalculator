@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         div = (Button)findViewById(R.id.btnDiv);
         mult = (Button)findViewById(R.id.btnMult);
         equals = (Button)findViewById(R.id.btnEq);
-        leftVal = (TextView)findViewById(R.id.leftValue);
+        leftVal = (TextView)findViewById(R.id.leftValueText);
         answer = (TextView)findViewById(R.id.answer);
         sign.setOnClickListener(this);
         dot.setOnClickListener(this);
@@ -70,7 +70,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void computeCalculation() {
-        if(!Double.isNaN(leftValue)) {
+        android.util.Log.i("ComputeCalc: ", "inside computeCalc");
+        android.util.Log.i("ComputeCalc: ", "leftval: " + leftValue);
+        android.util.Log.i("ComputeCalc: ", "rightval: " + rightValue);
+        android.util.Log.i("ComputeCalc: ", "leftval is nan: " + !Double.isNaN(leftValue));
+        android.util.Log.i("ComputeCalc: ", "answer: " + answer.getText().toString());
+        android.util.Log.i("ComputeCalc: ", "answer == : " + (answer.getText().toString().isEmpty()));
+        if(!Double.isNaN(leftValue) && !answer.getText().toString().isEmpty()) {
+            //this doesn't work lol
+            android.util.Log.i("ComputeCalc: ", "inside if");
             rightValue = Double.parseDouble(answer.getText().toString());
             android.util.Log.i("ComputeCalc: ", "lVal: " + leftValue);
             android.util.Log.i("ComputeCalc: ", "rVal: " + rightValue);
@@ -94,109 +102,145 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void deleteValue() {
-        float size = answer.getTextSize();
+        float size = answer.getText().toString().length();
         CharSequence text;
         if (size >= 1) {
-            text = answer.getText();
+            text = answer.getText().toString();
             text = text.subSequence(0, text.length() - 1);
             answer.setText(text);
         }
         else {
-            try {
-                answer.setText("0");
-            }
-            catch (Exception e){}
+            //leftValue = Double.NaN;
+            answer.setText("0");
         }
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnSign) {
-            double val = Double.parseDouble(answer.getText().toString());
-            val = -val;
-            answer.setText(decimalFormat.format(val));
+            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
+            if (!Double.isNaN(Double.parseDouble(answer.getText().toString()))) {
+                double val = Double.parseDouble(answer.getText().toString());
+                val = -val;
+                answer.setText(decimalFormat.format(val));
+            }
+            else {
+                answer.setText("-");
+            }
         }
         if (v.getId() == R.id.btnMult) {
+            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
             computeCalculation();
             CURRENT_ACTION = MULT;
-            //answer.append("*");
             android.util.Log.i("OnClick: ", "lVal: " + leftValue);
             android.util.Log.i("onClick: ", "rVal: " + rightValue);
             leftVal.setText(decimalFormat.format(leftValue) + " * ");
             answer.setText(null);
         }
         if (v.getId() == R.id.btnDel) {
-            deleteValue();
+            answer.setText("0");
+            //deleteValue();
         }
         if (v.getId() == R.id.btnDiv) {
+            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
             computeCalculation();
             CURRENT_ACTION = DIV;
-            //answer.append("/");
             android.util.Log.i("OnClick: ", "lVal: " + leftValue);
             android.util.Log.i("onClick: ", "rVal: " + rightValue);
             leftVal.setText(decimalFormat.format(leftValue) + " / ");
             answer.setText(null);
         }
         if (v.getId() == R.id.btnAdd) {
+            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
             computeCalculation();
             CURRENT_ACTION = ADD;
-            //answer.append("+");
             android.util.Log.i("OnClick: ", "lVal: " + leftValue);
             android.util.Log.i("onClick: ", "rVal: " + rightValue);
             leftVal.setText(decimalFormat.format(leftValue) + " + ");
             answer.setText(null);
         }
         if (v.getId() == R.id.btnSub) {
+            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
             computeCalculation();
             CURRENT_ACTION = SUB;
-            //answer.append("-");
             android.util.Log.i("OnClick: ", "lVal: " + leftValue);
             android.util.Log.i("onClick: ", "rVal: " + rightValue);
             leftVal.setText(decimalFormat.format(leftValue) + " - ");
             answer.setText(null);
         }
         if (v.getId() == R.id.btnEq) {
+            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
             computeCalculation();
             android.util.Log.i("OnClick: ", "lVal: " + leftValue);
             android.util.Log.i("onClick: ", "rVal: " + rightValue);
             leftVal.setText(leftVal.getText().toString() + decimalFormat.format(rightValue) +
-                    " = ");// + decimalFormat.format(leftValue));
-            answer.setText(decimalFormat.format(leftValue));
+                    " = " + decimalFormat.format(leftValue));// + decimalFormat.format(leftValue));
+            //answer.setText(decimalFormat.format(leftValue));
             //answer.append(" = " + leftValue);
-            leftValue = Double.NaN;
+            leftValue = leftValue;
             CURRENT_ACTION = 'O';
         }
         if (v.getId() == R.id.btnDot) {
             answer.append(".");
         }
         if (v.getId() == R.id.btnOne) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("1");
+            }
             answer.append("1");
         }
         if (v.getId() == R.id.btnTwo) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("2");
+            }
             answer.append("2");
         }
         if (v.getId() == R.id.btnThree) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("3");
+            }
             answer.append("3");
         }
         if (v.getId() == R.id.btnFour) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("4");
+            }
             answer.append("4");
         }
         if (v.getId() == R.id.btnFive) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("5");
+            }
             answer.append("5");
         }
         if (v.getId() == R.id.btnSix) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("6");
+            }
             answer.append("6");
         }
         if (v.getId() == R.id.btnSeven) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("7");
+            }
             answer.append("7");
         }
         if (v.getId() == R.id.btnEight) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("8");
+            }
             answer.append("8");
         }
         if (v.getId() == R.id.btnNine) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("9");
+            }
             answer.append("9");
         }
         if (v.getId() == R.id.btnZero) {
+            if (answer.getText().toString() == "0") {
+                answer.setText("0");
+            }
             answer.append("0");
         }
     }
