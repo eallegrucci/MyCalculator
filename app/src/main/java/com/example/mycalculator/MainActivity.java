@@ -2,6 +2,8 @@ package com.example.mycalculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Button;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final char DIV = '/';
 
     private char CURRENT_ACTION;
+
     DecimalFormat decimalFormat = new DecimalFormat("#.##########");
 
     @Override
@@ -70,18 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void computeCalculation() {
-        android.util.Log.i("ComputeCalc: ", "inside computeCalc");
-        android.util.Log.i("ComputeCalc: ", "leftval: " + leftValue);
-        android.util.Log.i("ComputeCalc: ", "rightval: " + rightValue);
-        android.util.Log.i("ComputeCalc: ", "leftval is nan: " + !Double.isNaN(leftValue));
-        android.util.Log.i("ComputeCalc: ", "answer: " + answer.getText().toString());
-        android.util.Log.i("ComputeCalc: ", "answer == : " + (answer.getText().toString().isEmpty()));
         if(!Double.isNaN(leftValue) && !answer.getText().toString().isEmpty()) {
-            //this doesn't work lol
-            android.util.Log.i("ComputeCalc: ", "inside if");
             rightValue = Double.parseDouble(answer.getText().toString());
-            android.util.Log.i("ComputeCalc: ", "lVal: " + leftValue);
-            android.util.Log.i("ComputeCalc: ", "rVal: " + rightValue);
             answer.setText(null);
 
             if(CURRENT_ACTION == ADD)
@@ -94,95 +87,145 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 leftValue = this.leftValue / rightValue;
         }
         else {
-            try {
-                leftValue = Double.parseDouble(answer.getText().toString());
-            }
-            catch (Exception e){}
+            leftValue = Double.parseDouble(answer.getText().toString());
         }
     }
 
     private void deleteValue() {
         float size = answer.getText().toString().length();
         CharSequence text;
+        android.util.Log.i("deleteVal: ", "size: " + size);
         if (size >= 1) {
             text = answer.getText().toString();
             text = text.subSequence(0, text.length() - 1);
             answer.setText(text);
         }
         else {
-            //leftValue = Double.NaN;
-            answer.setText("0");
+            leftValue = Double.NaN;
+            rightValue = Double.NaN;
+            answer.setText(null);
         }
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnSign) {
-            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
-            if (!Double.isNaN(Double.parseDouble(answer.getText().toString()))) {
+            if (answer.getText().toString().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setMessage("No value to negate");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
                 double val = Double.parseDouble(answer.getText().toString());
                 val = -val;
                 answer.setText(decimalFormat.format(val));
             }
-            else {
-                answer.setText("-");
-            }
         }
         if (v.getId() == R.id.btnMult) {
-            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
-            computeCalculation();
-            CURRENT_ACTION = MULT;
-            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
-            android.util.Log.i("onClick: ", "rVal: " + rightValue);
-            leftVal.setText(decimalFormat.format(leftValue) + " * ");
-            answer.setText(null);
+            if (answer.getText().toString().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setMessage("Nothing to multiply");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                computeCalculation();
+                CURRENT_ACTION = MULT;
+                leftVal.setText(decimalFormat.format(leftValue) + " * ");
+                answer.setText(null);
+            }
         }
         if (v.getId() == R.id.btnDel) {
-            answer.setText("0");
-            //deleteValue();
+            deleteValue();
         }
         if (v.getId() == R.id.btnDiv) {
-            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
-            computeCalculation();
-            CURRENT_ACTION = DIV;
-            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
-            android.util.Log.i("onClick: ", "rVal: " + rightValue);
-            leftVal.setText(decimalFormat.format(leftValue) + " / ");
-            answer.setText(null);
+            if (answer.getText().toString().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setMessage("Nothing to divide");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                computeCalculation();
+                CURRENT_ACTION = DIV;
+                leftVal.setText(decimalFormat.format(leftValue) + " / ");
+                answer.setText(null);
+            }
         }
         if (v.getId() == R.id.btnAdd) {
-            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
-            computeCalculation();
-            CURRENT_ACTION = ADD;
-            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
-            android.util.Log.i("onClick: ", "rVal: " + rightValue);
-            leftVal.setText(decimalFormat.format(leftValue) + " + ");
-            answer.setText(null);
+            if (answer.getText().toString().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setMessage("Nothing to add");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                computeCalculation();
+                CURRENT_ACTION = ADD;
+                leftVal.setText(decimalFormat.format(leftValue) + " + ");
+                answer.setText(null);
+            }
         }
         if (v.getId() == R.id.btnSub) {
-            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
-            computeCalculation();
-            CURRENT_ACTION = SUB;
-            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
-            android.util.Log.i("onClick: ", "rVal: " + rightValue);
-            leftVal.setText(decimalFormat.format(leftValue) + " - ");
-            answer.setText(null);
+            if (answer.getText().toString().isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setMessage("Nothing to subtract");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                computeCalculation();
+                CURRENT_ACTION = SUB;
+                leftVal.setText(decimalFormat.format(leftValue) + " - ");
+                answer.setText(null);
+            }
         }
         if (v.getId() == R.id.btnEq) {
-            android.util.Log.i("onClick: ", "answer: " + answer.getText().toString());
-            computeCalculation();
-            android.util.Log.i("OnClick: ", "lVal: " + leftValue);
-            android.util.Log.i("onClick: ", "rVal: " + rightValue);
-            if (CURRENT_ACTION == 'O')
-                leftVal.setText(decimalFormat.format(leftValue));
-            else {
-                leftVal.setText(leftVal.getText().toString() + decimalFormat.format(rightValue) +
-                        " = " + decimalFormat.format(leftValue));
-                //answer.setText(decimalFormat.format(leftValue));
-                //answer.append(" = " + leftValue);
+            if (answer.getText().toString().isEmpty() || Double.isNaN(leftValue)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setMessage("Nothing to calculate");
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
-            leftValue = Double.NaN;
-            CURRENT_ACTION = 'O';
+            else {
+                computeCalculation();
+                leftVal.setText(leftVal.getText().toString() + decimalFormat.format(rightValue) +
+                            " = " + decimalFormat.format(leftValue));
+                leftValue = Double.NaN;
+                answer.setText(null);
+                CURRENT_ACTION = '0';
+            }
         }
         if (v.getId() == R.id.btnDot) {
             answer.append(".");
