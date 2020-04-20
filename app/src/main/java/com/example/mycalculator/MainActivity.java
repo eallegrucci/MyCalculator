@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void deleteValue() {
         float size = answer.getText().toString().length();
         CharSequence text;
-        android.util.Log.i("deleteVal: ", "size: " + size);
         if (size >= 1) {
             text = answer.getText().toString();
             text = text.subSequence(0, text.length() - 1);
@@ -228,66 +227,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if (v.getId() == R.id.btnDot) {
-            answer.append(".");
+            if (answer.getText().toString().contains(".")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setNeutralButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.setMessage("This number already has a decimal point");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+            else {
+                answer.append(".");
+            }
         }
         if (v.getId() == R.id.btnOne) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("1");
-            }
             answer.append("1");
         }
         if (v.getId() == R.id.btnTwo) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("2");
-            }
             answer.append("2");
         }
         if (v.getId() == R.id.btnThree) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("3");
-            }
             answer.append("3");
         }
         if (v.getId() == R.id.btnFour) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("4");
-            }
             answer.append("4");
         }
         if (v.getId() == R.id.btnFive) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("5");
-            }
             answer.append("5");
         }
         if (v.getId() == R.id.btnSix) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("6");
-            }
             answer.append("6");
         }
         if (v.getId() == R.id.btnSeven) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("7");
-            }
             answer.append("7");
         }
         if (v.getId() == R.id.btnEight) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("8");
-            }
             answer.append("8");
         }
         if (v.getId() == R.id.btnNine) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("9");
-            }
             answer.append("9");
         }
         if (v.getId() == R.id.btnZero) {
-            if (answer.getText().toString() == "0") {
-                answer.setText("0");
-            }
             answer.append("0");
         }
     }
